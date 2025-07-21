@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public Rigidbody2D playerRB;
     [SerializeField] public ParticleSystem smokeFX;
     [SerializeField] private bool isFacingRight = true;
+    [SerializeField] private BoxCollider2D playerCol;
 
     [Header("Movement Settings")]
     [SerializeField] public float moveSpeed = 0F;
@@ -22,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public Vector2 groundCheckSize = new Vector2(0F, 0F);
     [SerializeField] public LayerMask groundLayer;
     [SerializeField] private bool isGrounded;
+    [SerializeField] private bool isOnPlatform;
 
     [Header("Gravity Settings")]
     [SerializeField] public float baseGravity = 0F;
@@ -56,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         trailRenderer = GetComponent<TrailRenderer>();
+        playerCol = GetComponent<BoxCollider2D>();
     }
 
     private void Update()
@@ -223,6 +226,37 @@ public class PlayerMovement : MonoBehaviour
 
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
+    }
+
+    public void Drop(InputAction.CallbackContext context)
+    {
+        if(context.performed && isGrounded && isOnPlatform && playerCol.enabled)
+        {
+            StartCoroutine(DisablePlayerCollider(0.4F));
+        }
+    }
+
+    private IEnumerator DisablePlayerCollider(float disableTime)
+    {
+        playerCol.enabled = false;
+        yield return new WaitForSeconds(disableTime);
+        playerCol.enabled = true;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            isOnPlatform = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            isOnPlatform = false;
+        }
     }
 
     private void OnDrawGizmosSelected()
