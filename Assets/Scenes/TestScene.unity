@@ -1904,6 +1904,7 @@ GameObject:
   - component: {fileID: 466693479}
   - component: {fileID: 466693481}
   - component: {fileID: 466693482}
+  - component: {fileID: 466693483}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1926,8 +1927,8 @@ MonoBehaviour:
   playerRB: {fileID: 466693475}
   smokeFX: {fileID: 537846037}
   isFacingRight: 1
-  moveSpeed: 5
-  jumpPower: 7
+  moveSpeed: 7
+  jumpPower: 8
   maxJumps: 2
   jumpsRemaining: 0
   groundCheckPosition: {fileID: 765943978}
@@ -1936,7 +1937,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   isGrounded: 0
-  baseGravity: 1.3
+  baseGravity: 1
   maxFallSpeed: 11
   fallSpeedMultiplier: 1.5
   wallCheckPosition: {fileID: 712130224}
@@ -1951,6 +1952,12 @@ MonoBehaviour:
   wallJumpDirection: 0
   wallJumpTimer: 0
   isWallJumping: 0
+  dashSpeed: 20
+  dashDuration: 0.1
+  dashCooldown: 0.1
+  isDashing: 0
+  canDash: 1
+  trailRenderer: {fileID: 0}
   horizontalMovement: 0
 --- !u!114 &466693474
 MonoBehaviour:
@@ -2065,6 +2072,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: eb9af011-b643-445a-bec8-124470bbb5c5
     m_ActionName: 'Player/Hold[/Keyboard/f]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 466693473}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: Dash
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: f4de9304-0aad-4ee5-a4d9-d4710d3f4b59
+    m_ActionName: 'Player/Dash[/Mouse/rightButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -2277,7 +2300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a86bd042b8f04e44a5f6b2191e6e7a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 3
+  maxHealth: 5
   currentHealth: 0
   spriteRenderer: {fileID: 0}
   healthUI: {fileID: 942128867}
@@ -2294,7 +2317,114 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 8250660753986190185, guid: 191bcaed05bad584dae203519349e5b9, type: 3}
-  bulletSpeed: 50
+  bulletSpeed: 100
+--- !u!96 &466693483
+TrailRenderer:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 466693472}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Time: 0.1
+  m_PreviewTimeScale: 1
+  m_Parameters:
+    serializedVersion: 3
+    widthMultiplier: 0.3
+    widthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    colorGradient:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 0}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    numCornerVertices: 0
+    numCapVertices: 0
+    alignment: 0
+    textureMode: 0
+    textureScale: {x: 1, y: 1}
+    shadowBias: 0.5
+    generateLightingData: 0
+  m_MinVertexDistance: 0.1
+  m_MaskInteraction: 0
+  m_Autodestruct: 0
+  m_Emitting: 0
+  m_ApplyActiveColorSpace: 1
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -2427,7 +2557,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.1, y: 0.8585, z: -20}
+  m_LocalPosition: {x: 0.1, y: 0.8585, z: -30}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8457,7 +8587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 886251e9a18ece04ea8e61686c173e1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CameraDistance: 20
+  CameraDistance: 30
   DeadZoneDepth: 0
   Composition:
     ScreenPosition: {x: 0, y: 0}
@@ -8528,7 +8658,7 @@ Transform:
   m_GameObject: {fileID: 1146103461}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.1, y: 0.8585, z: -20}
+  m_LocalPosition: {x: 0.1, y: 0.8585, z: -30}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10010,11 +10140,11 @@ MonoBehaviour:
   - {fileID: 5913807468488643321, guid: 616127b9d166f4d468bb4a2b6ecaf4ac, type: 3}
   - {fileID: 1363839184240643636, guid: 69d207451379f674283d9e93ff99c036, type: 3}
   - {fileID: 8888640934504829418, guid: 5ef5e23319075084486a4cc38d2b11c5, type: 3}
-  bigGemProbability: 0.2
-  enemyProbability: 0.1
-  maxObjects: 5
+  bigGemProbability: 0.1
+  enemyProbability: 0.5
+  maxObjects: 15
   gemLifeTime: 10
-  spawnInterval: 0.5
+  spawnInterval: 0.3
   validSpawnPositions: []
   spawnObjects: []
   isSpawning: 0

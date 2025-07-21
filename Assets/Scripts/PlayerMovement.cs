@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -42,10 +43,26 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float wallJumpTimer;
     [SerializeField] private bool isWallJumping;
 
+    [Header("Dash Settings")]
+    [SerializeField] public float dashSpeed = 0F;
+    [SerializeField] public float dashDuration = 0F;
+    [SerializeField] public float dashCooldown = 0F;
+    [SerializeField] private bool isDashing = false;
+    [SerializeField] private bool canDash = true;
+    [SerializeField] private TrailRenderer trailRenderer;
+
     [SerializeField][HideInInspector] private float horizontalMovement;
 
-    void Update()
+    private void Start()
     {
+        trailRenderer = GetComponent<TrailRenderer>();
+    }
+
+    private void Update()
+    {
+        if (isDashing)
+            return;
+        
         GroundCheck();
         Gravity();
         WallSlide();
@@ -180,6 +197,30 @@ public class PlayerMovement : MonoBehaviour
         isWallJumping = false;
     }
 
+    public void Dash(InputAction.CallbackContext context)
+    {
+        if(context.performed && canDash)
+        {
+            StartCoroutine(DashCoroutine());
+        }
+    }
+
+    private IEnumerator DashCoroutine()
+    {
+        canDash = false;
+        isDashing = true;
+        trailRenderer.emitting = true;
+        float dashDirection = isFacingRight ? 1F : -1F;
+        playerRB.linearVelocity = new Vector2(dashDirection * dashSpeed, playerRB.linearVelocity.y);
+
+        yield return new WaitForSeconds(dashDuration);
+        playerRB.linearVelocity = new Vector2(0F, playerRB.linearVelocity.y);
+        isDashing = false;
+        trailRenderer.emitting = false;
+
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
+    }
 
     private void OnDrawGizmosSelected()
     {

@@ -1,5 +1,7 @@
 using JetBrains.Annotations;
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -11,6 +13,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] public int damage;
 
     [SerializeField] public int maxHealth = 0;
+
+    [SerializeField] public List<LootItem> lootTable = new List<LootItem>();
 
     [SerializeField] private Transform player;
     [SerializeField] private Rigidbody2D enemyRB;
@@ -87,6 +91,22 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        foreach(LootItem lootItem in lootTable)
+        {
+            if (Random.Range(0F, 100F) <= lootItem.dropChance)
+                InstantiateLoot(lootItem.itemPrefab);
+            break;
+        }
+
         Destroy(gameObject);
+    }
+
+    private void InstantiateLoot(GameObject loot)
+    {
+        if (loot)
+        {
+            GameObject droppedLoot = Instantiate(loot, transform.position, Quaternion.identity);
+            droppedLoot.GetComponent<SpriteRenderer>().color = Color.red;
+        }
     }
 }
