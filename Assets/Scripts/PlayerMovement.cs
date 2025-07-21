@@ -207,6 +207,8 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator DashCoroutine()
     {
+        Physics2D.IgnoreLayerCollision(7, 8, true);
+
         canDash = false;
         isDashing = true;
         trailRenderer.emitting = true;
@@ -217,6 +219,7 @@ public class PlayerMovement : MonoBehaviour
         playerRB.linearVelocity = new Vector2(0F, playerRB.linearVelocity.y);
         isDashing = false;
         trailRenderer.emitting = false;
+        Physics2D.IgnoreLayerCollision(7, 8, false);
 
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
